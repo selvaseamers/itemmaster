@@ -13,7 +13,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class ProductDescription {
 
 	public static enum EntryStatus {
-		DRAFT, COMPLETE, APPROVED
+		DRAFT, COMPLETE, APPROVED, REJECTED
 	}
 	
 	public static enum ProductType{

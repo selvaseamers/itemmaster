@@ -28,14 +28,11 @@ public class DataEntryController {
 			return new ResponseEntity<CustomErrorType>(mesage, HttpStatus.CONFLICT);
 		}
 
-		if (description.getProductIdType().equals(ProductDescription.ProductType.UPC.toString())) {
-			description.setProductId(String.format("%012d", description.getProductId()));
-		} else if (description.getProductIdType().equals(ProductDescription.ProductType.GTIN.toString())) {
-			description.setProductId(String.format("%014d", description.getProductId()));
-		} else if (description.getProductIdType().equals(ProductDescription.ProductType.ISBN.toString())) {
-			description.setProductId(String.format("%013d", description.getProductId()));
-		} else if (description.getProductIdType().equals(ProductDescription.ProductType.EAN.toString())) {
-			description.setProductId(String.format("%012d", description.getProductId()));
+		description = dataEntryService.buildProductId(description);
+
+		mesage = dataEntryService.validateProductId(description.getProductId());
+		if (!mesage.getErrorMessage().equals("noerror")) {
+			return new ResponseEntity<CustomErrorType>(mesage, HttpStatus.CONFLICT);
 		}
 
 		return new ResponseEntity<ProductDescription>(dataEntryService.save(description), HttpStatus.CREATED);

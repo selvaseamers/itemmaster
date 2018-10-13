@@ -25,52 +25,52 @@ public class DataEntryService {
 	@Autowired
 	DataEntryRepository dataEntryRepository;
 
-//	@Autowired
-//	AdditionalCategoryAttributesRepository acAttributesRepository;
-//
-//	@Autowired
-//	ComplianceLRAttributesRepository crlAttributesRepository;
-//
-//	@Autowired
-//	DiscoverabilityAttributesRepository dArributesRepository;
-//
-//	@Autowired
-//	ImageUrlsRepository imageUrlsRepository;
-//
-//	@Autowired
-//	LogisticsRepository logisticsRepository;
-//
-//	@Autowired
-//	NiceToHaveAttributesRepository niceToHaveAttributesRepository;
+	@Autowired
+	AdditionalCategoryAttributesRepository acAttributesRepository;
+
+	@Autowired
+	ComplianceLRAttributesRepository crlAttributesRepository;
+
+	@Autowired
+	DiscoverabilityAttributesRepository dArributesRepository;
+
+	@Autowired
+	ImageUrlsRepository imageUrlsRepository;
+
+	@Autowired
+	LogisticsRepository logisticsRepository;
+
+	@Autowired
+	NiceToHaveAttributesRepository niceToHaveAttributesRepository;
 
 	public ProductDescription save(ProductDescription productDescription) {
-		return dataEntryRepository.saveAndFlush(productDescription);
+		productDescription = dataEntryRepository.saveAndFlush(productDescription);
 
-//		if (productDescription.getAdditionalCategoryAttributes() != null) {
-//			acAttributesRepository.saveAndFlush(productDescription.getAdditionalCategoryAttributes());
-//		}
-//
-//		if (productDescription.getComplianceLRAttributes() != null) {
-//			crlAttributesRepository.saveAndFlush(productDescription.getComplianceLRAttributes());
-//		}
-//
-//		if (productDescription.getDiscoverabilityAttributes() != null) {
-//			dArributesRepository.saveAndFlush(productDescription.getDiscoverabilityAttributes());
-//		}
-//
-//		if (productDescription.getImageUrls() != null) {
-//			imageUrlsRepository.saveAndFlush(productDescription.getImageUrls());
-//		}
-//
-//		if (productDescription.getLogistics() != null) {
-//			logisticsRepository.saveAndFlush(productDescription.getLogistics());
-//		}
-//
-//		if (productDescription.getNiceToHaveAttributes() != null) {
-//			niceToHaveAttributesRepository.saveAndFlush(productDescription.getNiceToHaveAttributes());
-//		}
+		if (productDescription.getAdditionalCategoryAttributes() != null) {
+			acAttributesRepository.saveAndFlush(productDescription.getAdditionalCategoryAttributes());
+		}
 
-		// return productDescription;
+		if (productDescription.getComplianceLRAttributes() != null) {
+			crlAttributesRepository.saveAndFlush(productDescription.getComplianceLRAttributes());
+		}
+
+		if (productDescription.getDiscoverabilityAttributes() != null) {
+			dArributesRepository.saveAndFlush(productDescription.getDiscoverabilityAttributes());
+		}
+
+		if (productDescription.getImageUrls() != null) {
+			imageUrlsRepository.saveAndFlush(productDescription.getImageUrls());
+		}
+
+		if (productDescription.getLogistics() != null) {
+			logisticsRepository.saveAndFlush(productDescription.getLogistics());
+		}
+
+		if (productDescription.getNiceToHaveAttributes() != null) {
+			niceToHaveAttributesRepository.saveAndFlush(productDescription.getNiceToHaveAttributes());
+		}
+
+		return productDescription;
 	}
 
 	public ProductDescription update(ProductDescription productDescription) {
@@ -78,12 +78,41 @@ public class DataEntryService {
 
 	}
 
-	public ProductDescription find(Long id) {
+	public ProductDescription find(String id) {
 		return dataEntryRepository.findOne(id);
 	}
 
 	public List<ProductDescription> findAll() {
 		return dataEntryRepository.findAll();
+	}
+
+	public ProductDescription buildProductId(ProductDescription description) {
+
+		if (description.getProductIdType().equals(ProductDescription.ProductType.UPC.toString())) {
+			description.setProductId(String.format("%0" + (12 - description.getProductId().length()) + "d%s", 0,
+					description.getProductId()));
+		} else if (description.getProductIdType().equals(ProductDescription.ProductType.GTIN.toString())) {
+			description.setProductId(String.format("%0" + (14 - description.getProductId().length()) + "d%s", 0,
+					description.getProductId()));
+		} else if (description.getProductIdType().equals(ProductDescription.ProductType.ISBN.toString())) {
+			description.setProductId(String.format("%0" + (13 - description.getProductId().length()) + "d%s", 0,
+					description.getProductId()));
+		} else if (description.getProductIdType().equals(ProductDescription.ProductType.EAN.toString())) {
+			description.setProductId(String.format("%0" + (13 - description.getProductId().length()) + "d%s", 0,
+					description.getProductId()));
+		}
+
+		System.out.println(" ====> Generated : " + description.getProductId());
+		return description;
+	}
+
+	public CustomErrorType validateProductId(String productId) {
+
+		if (find(productId) != null) {
+			return new CustomErrorType("ProductId : " + productId + " Already Exists");
+		}
+
+		return new CustomErrorType("noerror");
 	}
 
 	public CustomErrorType validate(ProductDescription description) {
@@ -98,14 +127,6 @@ public class DataEntryService {
 
 		if (description.getProductId() == null || description.getProductId().isEmpty()) {
 			return new CustomErrorType("ProductId cannot be empty");
-		}
-
-//		if (dataEntryRepository.findByName(description.getProductId()) != null) {
-//			return new CustomErrorType("ProductId : " + description.getProductId() + " Already Exists");
-//		}
-
-		if (description.getProductIdType() == null || description.getProductIdType().isEmpty()) {
-			return new CustomErrorType("ProductIdType cannot be empty");
 		}
 
 		if (description.getProductIdType().equals(ProductDescription.ProductType.UPC.toString())) {
@@ -126,6 +147,10 @@ public class DataEntryService {
 			}
 		} else {
 			return new CustomErrorType("Given ProductType : " + description.getProductIdType() + " dosen't match");
+		}
+
+		if (description.getProductIdType() == null || description.getProductIdType().isEmpty()) {
+			return new CustomErrorType("ProductIdType cannot be empty");
 		}
 
 		if (description.getShortDescription() == null || description.getShortDescription().isEmpty()) {
