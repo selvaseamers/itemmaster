@@ -21,7 +21,7 @@ public class DataEntryController {
 	@Autowired
 	DataEntryService dataEntryService;
 
-	@RequestMapping(value = "/create", method = RequestMethod.POST)
+	@RequestMapping(value = "", method = RequestMethod.POST)
 	public ResponseEntity<?> createDataEntry(@RequestBody ProductDescription description) {
 		CustomErrorType mesage = dataEntryService.validate(description);
 		if (!mesage.getErrorMessage().equals("noerror")) {
@@ -38,7 +38,7 @@ public class DataEntryController {
 		return new ResponseEntity<ProductDescription>(dataEntryService.save(description), HttpStatus.CREATED);
 	}
 
-	@RequestMapping(value = "/get", method = RequestMethod.GET)
+	@RequestMapping(value = "", method = RequestMethod.GET)
 	public ResponseEntity<?> getDataEntry() {
 		return new ResponseEntity<List<ProductDescription>>(dataEntryService.findAll(), HttpStatus.ACCEPTED);
 	}
