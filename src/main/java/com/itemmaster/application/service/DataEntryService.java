@@ -1,7 +1,15 @@
 package com.itemmaster.application.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +20,6 @@ import com.itemmaster.application.dao.DiscoverabilityAttributesRepository;
 import com.itemmaster.application.dao.ImageUrlsRepository;
 import com.itemmaster.application.dao.LogisticsRepository;
 import com.itemmaster.application.dao.NiceToHaveAttributesRepository;
-import com.itemmaster.application.entities.AdditionalCategoryAttributes;
-import com.itemmaster.application.entities.ComplianceLRAttributes;
-import com.itemmaster.application.entities.DiscoverabilityAttributes;
-import com.itemmaster.application.entities.ImageUrls;
 import com.itemmaster.application.entities.ProductDescription;
 import com.itemmaster.application.util.CustomErrorType;
 
@@ -45,28 +49,35 @@ public class DataEntryService {
 
 	public ProductDescription save(ProductDescription productDescription) {
 		productDescription = dataEntryRepository.saveAndFlush(productDescription);
+		String productId = productDescription.getProductId();
 
 		if (productDescription.getAdditionalCategoryAttributes() != null) {
+			productDescription.getAdditionalCategoryAttributes().setId(productId);
 			acAttributesRepository.saveAndFlush(productDescription.getAdditionalCategoryAttributes());
 		}
 
 		if (productDescription.getComplianceLRAttributes() != null) {
+			productDescription.getComplianceLRAttributes().setId(productId);
 			crlAttributesRepository.saveAndFlush(productDescription.getComplianceLRAttributes());
 		}
 
 		if (productDescription.getDiscoverabilityAttributes() != null) {
+			productDescription.getDiscoverabilityAttributes().setId(productId);
 			dArributesRepository.saveAndFlush(productDescription.getDiscoverabilityAttributes());
 		}
 
 		if (productDescription.getImageUrls() != null) {
+			productDescription.getImageUrls().setId(productId);
 			imageUrlsRepository.saveAndFlush(productDescription.getImageUrls());
 		}
 
 		if (productDescription.getLogistics() != null) {
+			productDescription.getLogistics().setId(productId);
 			logisticsRepository.saveAndFlush(productDescription.getLogistics());
 		}
 
 		if (productDescription.getNiceToHaveAttributes() != null) {
+			productDescription.getNiceToHaveAttributes().setId(productId);
 			niceToHaveAttributesRepository.saveAndFlush(productDescription.getNiceToHaveAttributes());
 		}
 
@@ -74,12 +85,50 @@ public class DataEntryService {
 	}
 
 	public ProductDescription update(ProductDescription productDescription) {
-		return dataEntryRepository.save(productDescription);
+
+		productDescription = dataEntryRepository.save(productDescription);
+		String productId = productDescription.getProductId();
+
+		if (productDescription.getAdditionalCategoryAttributes() != null) {
+			productDescription.getAdditionalCategoryAttributes().setId(productId);
+			acAttributesRepository.save(productDescription.getAdditionalCategoryAttributes());
+		}
+
+		if (productDescription.getComplianceLRAttributes() != null) {
+			productDescription.getComplianceLRAttributes().setId(productId);
+			crlAttributesRepository.save(productDescription.getComplianceLRAttributes());
+		}
+
+		if (productDescription.getDiscoverabilityAttributes() != null) {
+			productDescription.getDiscoverabilityAttributes().setId(productId);
+			dArributesRepository.save(productDescription.getDiscoverabilityAttributes());
+		}
+
+		if (productDescription.getImageUrls() != null) {
+			productDescription.getImageUrls().setId(productId);
+			imageUrlsRepository.save(productDescription.getImageUrls());
+		}
+
+		if (productDescription.getLogistics() != null) {
+			productDescription.getLogistics().setId(productId);
+			logisticsRepository.save(productDescription.getLogistics());
+		}
+
+		if (productDescription.getNiceToHaveAttributes() != null) {
+			productDescription.getNiceToHaveAttributes().setId(productId);
+			niceToHaveAttributesRepository.save(productDescription.getNiceToHaveAttributes());
+		}
+
+		return productDescription;
 
 	}
 
 	public ProductDescription find(String id) {
 		return dataEntryRepository.findOne(id);
+	}
+
+	public List<ProductDescription> findByStatus(String status) {
+		return dataEntryRepository.findByStatus(status);
 	}
 
 	public List<ProductDescription> findAll() {
@@ -104,6 +153,18 @@ public class DataEntryService {
 
 		System.out.println(" ====> Generated : " + description.getProductId());
 		return description;
+	}
+
+	public boolean isValidStatus(String status) {
+		return (status.equals(ProductDescription.EntryStatus.DRAFT.toString())
+				|| status.equals(ProductDescription.EntryStatus.COMPLETE.toString())
+				|| status.equals(ProductDescription.EntryStatus.APPROVED.toString())
+				|| status.equals(ProductDescription.EntryStatus.REJECTED.toString()));
+	}
+
+	public boolean isValidAdminStatus(String status) {
+		return (status.equals(ProductDescription.EntryStatus.APPROVED.toString())
+				|| status.equals(ProductDescription.EntryStatus.REJECTED.toString()));
 	}
 
 	public CustomErrorType validateProductId(String productId) {
@@ -229,6 +290,62 @@ public class DataEntryService {
 
 		return new CustomErrorType("noerror");
 
+	}
+
+	public FileOutputStream getXlsx() {
+
+		List<ProductDescription> description = findByStatus(ProductDescription.EntryStatus.APPROVED.toString());
+		ClassLoader classLoader = getClass().getClassLoader();
+		File file = new File(classLoader.getResource("ExcelFormat.xlsx").getFile());
+
+		Workbook workbook = null;
+		try {
+			workbook = new XSSFWorkbook(file);
+
+			Sheet sheet = workbook.getSheet("walmart");
+			int rowNum = 6;
+
+			for (ProductDescription r : description) {
+				Row row = sheet.createRow(rowNum++);
+				int i = 0;
+				// basic
+				row.createCell(i).setCellValue(r.getSku());
+				row.createCell(i++).setCellValue(r.getProductName());
+				row.createCell(i++).setCellValue(r.getProductIdType());
+				row.createCell(i++).setCellValue(r.getProductId());
+				row.createCell(i++).setCellValue(r.getShortDescription());
+				row.createCell(i++).setCellValue(r.getKeyFeatures());
+				row.createCell(i++).setCellValue(r.getUnitsPerConsumerUnit());
+				row.createCell(i++).setCellValue(r.getBrand());
+				row.createCell(i++).setCellValue(r.getManufacturer());
+				row.createCell(i++).setCellValue(r.getManufacturerPartNumber());
+				row.createCell(i++).setCellValue(r.getModelNumber());
+				// images
+				row.createCell(i++).setCellValue(r.getImageUrls().getMainImageUrl());
+				row.createCell(i++).setCellValue(r.getImageUrls().getProductSecondaryImageURL());
+				// offer
+				row.createCell(i++).setCellValue(r.getLogistics().getMsrp());
+				// Discoverability
+				row.createCell(i++).setCellValue(r.getDiscoverabilityAttributes().getFlavor());
+				row.createCell(i++).setCellValue(r.getDiscoverabilityAttributes().isReadyToEat());
+				row.createCell(i++).setCellValue(r.getDiscoverabilityAttributes().getCount());
+				row.createCell(i++).setCellValue(r.getDiscoverabilityAttributes().getSize());
+				// Complaince
+
+			}
+
+		} catch (InvalidFormatException | IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			try {
+				workbook.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return null;
 	}
 
 }

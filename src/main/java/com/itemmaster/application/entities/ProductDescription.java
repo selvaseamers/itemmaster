@@ -15,8 +15,8 @@ public class ProductDescription {
 	public static enum EntryStatus {
 		DRAFT, COMPLETE, APPROVED, REJECTED
 	}
-	
-	public static enum ProductType{
+
+	public static enum ProductType {
 		UPC, GTIN, ISBN, EAN
 	}
 
@@ -32,7 +32,7 @@ public class ProductDescription {
 	private String manufacturer;
 	private String manufacturerPartNumber;
 	private String modelNumber;
-	private Integer status;
+	private String status;
 	private Integer createdBy;
 	private Integer approvedBy;
 
@@ -215,11 +215,11 @@ public class ProductDescription {
 		this.niceToHaveAttributes = niceToHaveAttributes;
 	}
 
-	public Integer isStatus() {
+	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(Integer status) {
+	public void setStatus(String status) {
 		this.status = status;
 	}
 
