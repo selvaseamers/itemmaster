@@ -1,7 +1,10 @@
 package com.itemmaster.application.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Entity
 public class AdditionalCategoryAttributes {
@@ -55,6 +58,7 @@ public class AdditionalCategoryAttributes {
 	private boolean isHealthyIncentive;
 	private boolean isSnapEligible;
 	private boolean isWICEligible;
+	
 
 	public String getId() {
 		return id;

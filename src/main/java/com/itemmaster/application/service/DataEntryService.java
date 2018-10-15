@@ -48,7 +48,6 @@ public class DataEntryService {
 	NiceToHaveAttributesRepository niceToHaveAttributesRepository;
 
 	public ProductDescription save(ProductDescription productDescription) {
-		productDescription = dataEntryRepository.saveAndFlush(productDescription);
 		String productId = productDescription.getProductId();
 
 		if (productDescription.getAdditionalCategoryAttributes() != null) {
@@ -80,13 +79,13 @@ public class DataEntryService {
 			productDescription.getNiceToHaveAttributes().setId(productId);
 			niceToHaveAttributesRepository.saveAndFlush(productDescription.getNiceToHaveAttributes());
 		}
+		productDescription = dataEntryRepository.saveAndFlush(productDescription);
 
 		return productDescription;
 	}
 
 	public ProductDescription update(ProductDescription productDescription) {
 
-		productDescription = dataEntryRepository.save(productDescription);
 		String productId = productDescription.getProductId();
 
 		if (productDescription.getAdditionalCategoryAttributes() != null) {
@@ -118,6 +117,7 @@ public class DataEntryService {
 			productDescription.getNiceToHaveAttributes().setId(productId);
 			niceToHaveAttributesRepository.save(productDescription.getNiceToHaveAttributes());
 		}
+		productDescription = dataEntryRepository.save(productDescription);
 
 		return productDescription;
 
@@ -298,7 +298,7 @@ public class DataEntryService {
 
 	}
 
-	public FileOutputStream getXlsx() {
+	public Workbook getXlsx() {
 
 		List<ProductDescription> description = findByStatus(ProductDescription.EntryStatus.APPROVED.toString());
 		ClassLoader classLoader = getClass().getClassLoader();
@@ -315,7 +315,7 @@ public class DataEntryService {
 				Row row = sheet.createRow(rowNum++);
 				int i = 0;
 				// basic
-				row.createCell(i).setCellValue(r.getSku());
+				row.createCell(i++).setCellValue(r.getSku());
 				row.createCell(i++).setCellValue(r.getProductName());
 				row.createCell(i++).setCellValue(r.getProductIdType());
 				row.createCell(i++).setCellValue(r.getProductId());
@@ -327,31 +327,126 @@ public class DataEntryService {
 				row.createCell(i++).setCellValue(r.getManufacturerPartNumber());
 				row.createCell(i++).setCellValue(r.getModelNumber());
 				// images
-				row.createCell(i++).setCellValue(r.getImageUrls().getMainImageUrl());
-				row.createCell(i++).setCellValue(r.getImageUrls().getProductSecondaryImageURL());
+				if (r.getImageUrls() != null) {
+					row.createCell(i++).setCellValue(r.getImageUrls().getMainImageUrl());
+					row.createCell(i++).setCellValue(r.getImageUrls().getProductSecondaryImageURL());
+				} else {
+					i += 2;
+				}
 				// offer
-				row.createCell(i++).setCellValue(r.getLogistics().getMsrp());
-				// Discoverability
-				row.createCell(i++).setCellValue(r.getDiscoverabilityAttributes().getFlavor());
-				row.createCell(i++).setCellValue(r.getDiscoverabilityAttributes().isReadyToEat());
-				row.createCell(i++).setCellValue(r.getDiscoverabilityAttributes().getCount());
-				row.createCell(i++).setCellValue(r.getDiscoverabilityAttributes().getSize());
+				if (r.getLogistics() != null) {
+					row.createCell(i++).setCellValue(r.getLogistics().getMsrp());
+				} else {
+					i++;
+				}
+				// Discoverability r.getDiscoverabilityAttributes().getFlavor()
+				if (r.getDiscoverabilityAttributes() != null) {
+					row.createCell(i++).setCellValue(r.getDiscoverabilityAttributes().getFlavor());
+					row.createCell(i++).setCellValue(r.getDiscoverabilityAttributes().isReadyToEat());
+					row.createCell(i++).setCellValue(r.getDiscoverabilityAttributes().getCount());
+					row.createCell(i++).setCellValue(r.getDiscoverabilityAttributes().getSize());
+				} else {
+					i += 4;
+				}
 				// Complaince
-
+				if (r.getComplianceLRAttributes() != null) {
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().isPrivateLabelOrUnbranded());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().isExclusiveBrandsIndicator());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().isProp65WarningRequired());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().getProp65WarningText());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().isIntendedForHumanConsumption());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().isNutritionFactsLabelRequired());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().getNutritionFactsLabel());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().getNutritionIngredientsImage());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().isHasIngredientList());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().getIngredientListImage());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().isHasExpiration());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().getShelfLife());
+					row.createCell(i++).setCellValue("days");
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().isHasPricePerUnit());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().getPricePerUnitUom());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().getPricePerUnitQuantity());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().isHasGMOs());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().isPerishable());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().isTemperatureSensitive());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().isHasStateRestrictions());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().getStates());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().getZipCodes());
+					row.createCell(i++).setCellValue(r.getComplianceLRAttributes().getStateRestrictions());
+				} else {
+					i += 23;
+				}
+				// Additional category Attributes
+				if (r.getAdditionalCategoryAttributes() != null) {
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().isGmoFree());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getServingSize());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getServingsPerContainer());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getCalories());
+					row.createCell(i++).setCellValue("Calories");
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getCaloriesFromFat());
+					row.createCell(i++).setCellValue("Calories");
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getTotalFat());
+					row.createCell(i++).setCellValue("Gram");
+					row.createCell(i++)
+							.setCellValue(r.getAdditionalCategoryAttributes().getTotalFatPercentageDailyValue());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getFatCaloriesPerGram());
+					row.createCell(i++).setCellValue("Gram");
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getTotalCarbohydrate());
+					row.createCell(i++).setCellValue("Gram");
+					row.createCell(i++).setCellValue(
+							r.getAdditionalCategoryAttributes().getTotalCarbohydratePercentageDailyValue());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getCarbohydrateCaloriesPerGram());
+					row.createCell(i++).setCellValue("Gram");
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getNutrientName());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getNutrientAmount());
+					row.createCell(i++)
+							.setCellValue(r.getAdditionalCategoryAttributes().getNutrientPercentageDailyValue());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getNutrientFootnote());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getProteinCaloriesPerGram());
+					row.createCell(i++).setCellValue("Gram");
+					row.createCell(i++)
+							.setCellValue(r.getAdditionalCategoryAttributes().getTotalProteinPercentageDailyValue());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getTotalProtein());
+					row.createCell(i++).setCellValue("Gram");
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getFoodForm());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getContainerType());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getTimeAged());
+					row.createCell(i++).setCellValue("months; years");
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().isImitation());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getIngredients());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().isUsdaInspected());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().isHasHighFructoseCornSyrup());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getFoodAllergenStatements());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getInstructions());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getCaffeineDesignation());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getSpiceLevel());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().isMadeInHomeKitchen());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getBeefCut());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getPoultryCut());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().getReleaseDate());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().isHealthyIncentive());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().isSnapEligible());
+					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().isWICEligible());
+				} else {
+					i += 44;
+				}
+				// Nice to have attributes
+				if (r.getNiceToHaveAttributes() != null) {
+					row.createCell(i++).setCellValue(r.getNiceToHaveAttributes().isSkuUpdate());
+					row.createCell(i++).setCellValue(r.getNiceToHaveAttributes().getSafeHandlingInstructions());
+					row.createCell(i++).setCellValue(r.getNiceToHaveAttributes().getCuisine());
+					row.createCell(i++).setCellValue(r.getNiceToHaveAttributes().getFoodPreparationTips());
+					row.createCell(i++).setCellValue(r.getNiceToHaveAttributes().getFoodStorageTips());
+					row.createCell(i++).setCellValue(r.getNiceToHaveAttributes().getAcharacter());
+				}
 			}
 
 		} catch (InvalidFormatException | IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} finally {
-			try {
-				workbook.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 		}
 
-		return null;
+		return workbook;
 	}
 
 }

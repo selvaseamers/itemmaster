@@ -1,9 +1,15 @@
 package com.itemmaster.application.controller;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
+import java.util.Random;
 
+import org.apache.poi.ss.usermodel.Workbook;
 import org.springframework.beans.factory.annotation.Autowired;
-
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -86,8 +92,7 @@ public class DataEntryController {
 
 	@RequestMapping(value = "/status", method = RequestMethod.GET)
 	public ResponseEntity<?> getProductByStatus(@RequestParam("status") String status) {
-		return new ResponseEntity<List<ProductDescription>>(dataEntryService.findByStatus(status),
-				HttpStatus.OK);
+		return new ResponseEntity<List<ProductDescription>>(dataEntryService.findByStatus(status), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/{productId}/status", method = RequestMethod.PUT)
@@ -103,13 +108,33 @@ public class DataEntryController {
 		return new ResponseEntity<ProductDescription>(dataEntryService.update(description), HttpStatus.NO_CONTENT);
 	}
 
-//	@RequestMapping(value = "/gettemplate", method = RequestMethod.GET)
-//	public Response<?> getExcel() {
-//
-//		// incomplete to-do
-//		dataEntryService.getXlsx();
-//
-//		return null;
-//
-//	}
+	@RequestMapping(value = "/gettemplate", method = RequestMethod.GET)
+	public ResponseEntity<?> getExcel() {
+
+		Workbook excel = dataEntryService.getXlsx();
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		try {
+			excel.write(bos);
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				bos.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		byte[] bytes = bos.toByteArray();
+		String type = "application/vnd.ms-excel";
+
+		HttpHeaders responseHeaders = new HttpHeaders();
+		responseHeaders.add("content-disposition",
+				"attachment; filename=" + "FoodAndBeverage" + new Random(12l).nextInt() + ".xlsx");
+		responseHeaders.add("Content-Type", type);
+
+		ResponseEntity<?> respEntity = new ResponseEntity<>(bytes, responseHeaders, HttpStatus.OK);
+
+		return respEntity;
+
+	}
 }

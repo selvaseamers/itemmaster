@@ -36,32 +36,26 @@ public class ProductDescription {
 	private Integer createdBy;
 	private Integer approvedBy;
 
-	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "productId", referencedColumnName = "id")
 	private ImageUrls imageUrls;
 
-	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "productId", referencedColumnName = "id")
 	private Logistics logistics;
 
-	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "productId", referencedColumnName = "id")
 	private DiscoverabilityAttributes discoverabilityAttributes;
 
-	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "productId", referencedColumnName = "id")
 	private ComplianceLRAttributes complianceLRAttributes;
 
-	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "productId", referencedColumnName = "id")
 	private AdditionalCategoryAttributes additionalCategoryAttributes;
 
-	@JsonIgnore
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "productId", referencedColumnName = "id")
 	private NiceToHaveAttributes niceToHaveAttributes;

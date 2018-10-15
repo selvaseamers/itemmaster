@@ -1,7 +1,10 @@
 package com.itemmaster.application.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Entity
 public class ComplianceLRAttributes {
@@ -31,6 +34,7 @@ public class ComplianceLRAttributes {
 	private boolean hasIngredientList;
 	private String ingredientListImage;
 	private boolean isPerishable;
+
 
 	public String getId() {
 		return id;

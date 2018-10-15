@@ -1,7 +1,10 @@
 package com.itemmaster.application.entities;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 
 @Entity
 public class NiceToHaveAttributes {
@@ -13,7 +16,7 @@ public class NiceToHaveAttributes {
 	private String cuisine;
 	private String foodPreparationTips;
 	private String foodStorageTips;
-	private String aCharacter;
+	private String acharacter;
 
 	public String getId() {
 		return id;
@@ -63,12 +66,12 @@ public class NiceToHaveAttributes {
 		this.foodStorageTips = foodStorageTips;
 	}
 
-	public String getACharacter() {
-		return aCharacter;
+	public String getAcharacter() {
+		return acharacter;
 	}
 
-	public void setACharacter(String aCharacter) {
-		this.aCharacter = aCharacter;
+	public void setAcharacter(String acharacter) {
+		this.acharacter = acharacter;
 	}
 
 }
