@@ -137,18 +137,24 @@ public class DataEntryService {
 
 	public ProductDescription buildProductId(ProductDescription description) {
 
+		String productId = description.getProductId();
+		int length = description.getProductId().length();
 		if (description.getProductIdType().equals(ProductDescription.ProductType.UPC.toString())) {
-			description.setProductId(String.format("%0" + (12 - description.getProductId().length()) + "d%s", 0,
-					description.getProductId()));
+			if (length != 12) {
+				description.setProductId(String.format("%0" + (12 - length) + "d%s", 0, productId));
+			}
 		} else if (description.getProductIdType().equals(ProductDescription.ProductType.GTIN.toString())) {
-			description.setProductId(String.format("%0" + (14 - description.getProductId().length()) + "d%s", 0,
-					description.getProductId()));
+			if (length != 14) {
+				description.setProductId(String.format("%0" + (14 - length) + "d%s", 0, productId));
+			}
 		} else if (description.getProductIdType().equals(ProductDescription.ProductType.ISBN.toString())) {
-			description.setProductId(String.format("%0" + (13 - description.getProductId().length()) + "d%s", 0,
-					description.getProductId()));
+			if (length != 13) {
+				description.setProductId(String.format("%0" + (13 - length) + "d%s", 0, productId));
+			}
 		} else if (description.getProductIdType().equals(ProductDescription.ProductType.EAN.toString())) {
-			description.setProductId(String.format("%0" + (13 - description.getProductId().length()) + "d%s", 0,
-					description.getProductId()));
+			if (length != 13) {
+				description.setProductId(String.format("%0" + (13 - length) + "d%s", 0, productId));
+			}
 		}
 
 		System.out.println(" ====> Generated : " + description.getProductId());

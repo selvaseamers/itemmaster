@@ -1,7 +1,6 @@
 package com.itemmaster.application.controller;
 
 import java.util.List;
-import javax.xml.ws.Response;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -104,13 +103,13 @@ public class DataEntryController {
 		return new ResponseEntity<ProductDescription>(dataEntryService.update(description), HttpStatus.NO_CONTENT);
 	}
 
-	@RequestMapping(value = "/gettemplate", method = RequestMethod.GET)
-	public Response<?> getExcel() {
-
-		// incomplete to-do
-		dataEntryService.getXlsx();
-
-		return null;
-
-	}
+//	@RequestMapping(value = "/gettemplate", method = RequestMethod.GET)
+//	public Response<?> getExcel() {
+//
+//		// incomplete to-do
+//		dataEntryService.getXlsx();
+//
+//		return null;
+//
+//	}
 }
