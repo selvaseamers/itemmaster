@@ -45,7 +45,8 @@ public class DataEntryController {
 		}
 
 		if (!dataEntryService.isValidStatus(description.getStatus())) {
-			return new ResponseEntity<CustomErrorType>(new CustomErrorType("Not a valid status"), HttpStatus.CONFLICT);
+			return new ResponseEntity<CustomErrorType>(
+					new CustomErrorType("Not a valid status should be DRAFT/ COMPLETE"), HttpStatus.CONFLICT);
 		}
 
 		return new ResponseEntity<ProductDescription>(dataEntryService.save(description), HttpStatus.CREATED);
@@ -67,7 +68,8 @@ public class DataEntryController {
 		}
 
 		if (!dataEntryService.isValidStatus(description.getStatus())) {
-			return new ResponseEntity<CustomErrorType>(new CustomErrorType("Not a valid status"), HttpStatus.CONFLICT);
+			return new ResponseEntity<CustomErrorType>(new CustomErrorType("Not a valid status APPROVED/ REJECTED"),
+					HttpStatus.CONFLICT);
 		}
 
 		return new ResponseEntity<ProductDescription>(dataEntryService.update(description), HttpStatus.NO_CONTENT);
@@ -103,6 +105,11 @@ public class DataEntryController {
 					HttpStatus.CONFLICT);
 		}
 		ProductDescription description = dataEntryService.find(productId);
+		if (description == null) {
+			return new ResponseEntity<CustomErrorType>(new CustomErrorType("ProductId not found"),
+					HttpStatus.CONFLICT);
+
+		}
 		description.setStatus(status);
 
 		return new ResponseEntity<ProductDescription>(dataEntryService.update(description), HttpStatus.NO_CONTENT);

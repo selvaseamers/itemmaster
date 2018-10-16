@@ -163,9 +163,7 @@ public class DataEntryService {
 
 	public boolean isValidStatus(String status) {
 		return (status.equals(ProductDescription.EntryStatus.DRAFT.toString())
-				|| status.equals(ProductDescription.EntryStatus.COMPLETE.toString())
-				|| status.equals(ProductDescription.EntryStatus.APPROVED.toString())
-				|| status.equals(ProductDescription.EntryStatus.REJECTED.toString()));
+				|| status.equals(ProductDescription.EntryStatus.COMPLETE.toString()));
 	}
 
 	public boolean isValidAdminStatus(String status) {
@@ -428,7 +426,7 @@ public class DataEntryService {
 					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().isSnapEligible());
 					row.createCell(i++).setCellValue(r.getAdditionalCategoryAttributes().isWICEligible());
 				} else {
-					i += 44;
+					i += 45;
 				}
 				// Nice to have attributes
 				if (r.getNiceToHaveAttributes() != null) {
