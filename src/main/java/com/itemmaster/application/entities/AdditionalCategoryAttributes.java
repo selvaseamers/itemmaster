@@ -124,19 +124,19 @@ public class AdditionalCategoryAttributes {
 		this.vintage = vintage;
 	}
 
-	public boolean isNonGrape() {
+	public boolean getIsNonGrape() {
 		return isNonGrape;
 	}
 
-	public void setNonGrape(boolean isNonGrape) {
+	public void setIsNonGrape(boolean isNonGrape) {
 		this.isNonGrape = isNonGrape;
 	}
 
-	public boolean isEstateBottled() {
+	public boolean getIsEstateBottled() {
 		return isEstateBottled;
 	}
 
-	public void setEstateBottled(boolean isEstateBottled) {
+	public void setIsEstateBottled(boolean isEstateBottled) {
 		this.isEstateBottled = isEstateBottled;
 	}
 
@@ -172,11 +172,11 @@ public class AdditionalCategoryAttributes {
 		this.containerType = containerType;
 	}
 
-	public boolean isGmoFree() {
+	public boolean getIsGmoFree() {
 		return isGmoFree;
 	}
 
-	public void setGmoFree(boolean isGmoFree) {
+	public void setIsGmoFree(boolean isGmoFree) {
 		this.isGmoFree = isGmoFree;
 	}
 
@@ -332,11 +332,11 @@ public class AdditionalCategoryAttributes {
 		this.foodForm = foodForm;
 	}
 
-	public boolean isImitation() {
+	public boolean getIsImitation() {
 		return isImitation;
 	}
 
-	public void setImitation(boolean isImitation) {
+	public void setIsImitation(boolean isImitation) {
 		this.isImitation = isImitation;
 	}
 
@@ -388,11 +388,11 @@ public class AdditionalCategoryAttributes {
 		this.spiceLevel = spiceLevel;
 	}
 
-	public boolean isMadeInHomeKitchen() {
+	public boolean getIsMadeInHomeKitchen() {
 		return isMadeInHomeKitchen;
 	}
 
-	public void setMadeInHomeKitchen(boolean isMadeInHomeKitchen) {
+	public void setIsMadeInHomeKitchen(boolean isMadeInHomeKitchen) {
 		this.isMadeInHomeKitchen = isMadeInHomeKitchen;
 	}
 
@@ -420,27 +420,27 @@ public class AdditionalCategoryAttributes {
 		this.releaseDate = releaseDate;
 	}
 
-	public boolean isHealthyIncentive() {
+	public boolean getIsHealthyIncentive() {
 		return isHealthyIncentive;
 	}
 
-	public void setHealthyIncentive(boolean isHealthyIncentive) {
+	public void setIsHealthyIncentive(boolean isHealthyIncentive) {
 		this.isHealthyIncentive = isHealthyIncentive;
 	}
 
-	public boolean isSnapEligible() {
+	public boolean getIsSnapEligible() {
 		return isSnapEligible;
 	}
 
-	public void setSnapEligible(boolean isSnapEligible) {
+	public void setIsSnapEligible(boolean isSnapEligible) {
 		this.isSnapEligible = isSnapEligible;
 	}
 
-	public boolean isWICEligible() {
+	public boolean getIsWICEligible() {
 		return isWICEligible;
 	}
 
-	public void setWICEligible(boolean isWICEligible) {
+	public void setIsWICEligible(boolean isWICEligible) {
 		this.isWICEligible = isWICEligible;
 	}
 

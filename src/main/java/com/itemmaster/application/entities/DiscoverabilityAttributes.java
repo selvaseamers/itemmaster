@@ -49,11 +49,11 @@ public class DiscoverabilityAttributes {
 		this.size = size;
 	}
 
-	public boolean isReadyToEat() {
+	public boolean getIsReadyToEat() {
 		return isReadyToEat;
 	}
 
-	public void setReadyToEat(boolean isReadyToEat) {
+	public void setIsReadyToEat(boolean isReadyToEat) {
 		this.isReadyToEat = isReadyToEat;
 	}
 

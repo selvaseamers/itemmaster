@@ -16,7 +16,7 @@ public class NiceToHaveAttributes {
 	private String cuisine;
 	private String foodPreparationTips;
 	private String foodStorageTips;
-	private String acharacter;
+	private String fancyCharacter;
 
 	public String getId() {
 		return id;
@@ -66,12 +66,12 @@ public class NiceToHaveAttributes {
 		this.foodStorageTips = foodStorageTips;
 	}
 
-	public String getAcharacter() {
-		return acharacter;
+	public String getFancyCharacter() {
+		return fancyCharacter;
 	}
 
-	public void setAcharacter(String acharacter) {
-		this.acharacter = acharacter;
+	public void setFancyCharacter(String fancyCharacter) {
+		this.fancyCharacter = fancyCharacter;
 	}
 
 }

@@ -44,27 +44,27 @@ public class ComplianceLRAttributes {
 		this.id = id;
 	}
 
-	public boolean isPrivateLabelOrUnbranded() {
+	public boolean getIsPrivateLabelOrUnbranded() {
 		return isPrivateLabelOrUnbranded;
 	}
 
-	public void setPrivateLabelOrUnbranded(boolean isPrivateLabelOrUnbranded) {
+	public void setIsPrivateLabelOrUnbranded(boolean isPrivateLabelOrUnbranded) {
 		this.isPrivateLabelOrUnbranded = isPrivateLabelOrUnbranded;
 	}
 
-	public boolean isExclusiveBrandsIndicator() {
+	public boolean getIsExclusiveBrandsIndicator() {
 		return exclusiveBrandsIndicator;
 	}
 
-	public void setExclusiveBrandsIndicator(boolean exclusiveBrandsIndicator) {
+	public void setIsExclusiveBrandsIndicator(boolean exclusiveBrandsIndicator) {
 		this.exclusiveBrandsIndicator = exclusiveBrandsIndicator;
 	}
 
-	public boolean isProp65WarningRequired() {
+	public boolean getIsProp65WarningRequired() {
 		return isProp65WarningRequired;
 	}
 
-	public void setProp65WarningRequired(boolean isProp65WarningRequired) {
+	public void setIsProp65WarningRequired(boolean isProp65WarningRequired) {
 		this.isProp65WarningRequired = isProp65WarningRequired;
 	}
 
@@ -124,11 +124,11 @@ public class ComplianceLRAttributes {
 		this.hasGMOs = hasGMOs;
 	}
 
-	public boolean isTemperatureSensitive() {
+	public boolean getIsTemperatureSensitive() {
 		return isTemperatureSensitive;
 	}
 
-	public void setTemperatureSensitive(boolean isTemperatureSensitive) {
+	public void setIsTemperatureSensitive(boolean isTemperatureSensitive) {
 		this.isTemperatureSensitive = isTemperatureSensitive;
 	}
 
@@ -172,19 +172,19 @@ public class ComplianceLRAttributes {
 		this.stateRestrictions = stateRestrictions;
 	}
 
-	public boolean isIntendedForHumanConsumption() {
+	public boolean getIsIntendedForHumanConsumption() {
 		return isIntendedForHumanConsumption;
 	}
 
-	public void setIntendedForHumanConsumption(boolean isIntendedForHumanConsumption) {
+	public void setIsIntendedForHumanConsumption(boolean isIntendedForHumanConsumption) {
 		this.isIntendedForHumanConsumption = isIntendedForHumanConsumption;
 	}
 
-	public boolean isNutritionFactsLabelRequired() {
+	public boolean getIsNutritionFactsLabelRequired() {
 		return isNutritionFactsLabelRequired;
 	}
 
-	public void setNutritionFactsLabelRequired(boolean isNutritionFactsLabelRequired) {
+	public void setIsNutritionFactsLabelRequired(boolean isNutritionFactsLabelRequired) {
 		this.isNutritionFactsLabelRequired = isNutritionFactsLabelRequired;
 	}
 
@@ -220,11 +220,11 @@ public class ComplianceLRAttributes {
 		this.ingredientListImage = ingredientListImage;
 	}
 
-	public boolean isPerishable() {
+	public boolean getIsPerishable() {
 		return isPerishable;
 	}
 
-	public void setPerishable(boolean isPerishable) {
+	public void setIsPerishable(boolean isPerishable) {
 		this.isPerishable = isPerishable;
 	}
 
